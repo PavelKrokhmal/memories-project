@@ -11,7 +11,7 @@ React + Redux, Node, Express, MongoDB
 ```
 $ git clone https://github.com/PavelKrokhmal/memories-project
 $ cd ./memories-project
-$ npm init
+$ npm install
 ```
 
 ## Running
