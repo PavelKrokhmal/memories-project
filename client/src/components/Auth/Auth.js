@@ -1,13 +1,19 @@
 import React, {useState} from 'react'
+import {GoogleLogin} from 'react-google-login'
+import {useDispatch} from 'react-redux'
+import {useHistory} from 'react-router-dom'
 import {Avatar, Button, Paper, Grid, Typography, Container, ButtonBase} from '@material-ui/core'
 import useStyles from './styles'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Input from './Input'
+import Icon from './icon'
 
 const Auth = () => {
     const classes = useStyles()
     const [showPassword, setShowPassword] = useState(false)
     const [isSignup, setIsSignup] = useState(false)
+    const dispatch = useDispatch()
+    const history = useHistory()
 
     const handleSubmit = () => {
 
@@ -27,8 +33,22 @@ const Auth = () => {
         setShowPassword(false)
     }
 
-    
+    const googleSuccess = async (res) => {
+        const result = res?.profileObj
+        const token = res?.tokenId
 
+        try {
+            dispatch({type: 'AUTH', data: {result, token}})
+            history.push('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const googleFailure = (error) => {
+        console.log(error)
+        console.log("Google sign in unsuccessful. Try again later.")
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -44,13 +64,13 @@ const Auth = () => {
                                 <Input 
                                     name="firsName" 
                                     label="First name" 
-                                    handleChanged={handleChanged} 
+                                    onChange={handleChanged} 
                                     autoFocus 
                                     half/>
                                 <Input 
                                     name="lastName" 
                                     label="Last name" 
-                                    handleChanged={handleChanged} 
+                                    onChange={handleChanged} 
                                     half/>
                             </>
                         )}
@@ -58,12 +78,12 @@ const Auth = () => {
                             name="email" 
                             label="Email address" 
                             type="email" 
-                            handleChanged={handleChanged}/>
+                            onChange={handleChanged}/>
                         <Input 
                             name="password" 
                             label="Password" 
                             type={showPassword ? "text" : "password"} 
-                            handleChanged={handleChanged} 
+                            onChange={handleChanged} 
                             handleShowPassword={handleShowPassword}/>
                         { isSignup && <Input 
                             name="consfirmPassword" 
@@ -80,6 +100,24 @@ const Auth = () => {
                         className={classes.submit}>
                         {isSignup ? 'Sign Up' : 'Sign In'}
                     </Button>
+                    <GoogleLogin clientId="405682172248-qefa9bbml4e0np3fedvdb9buuehsuoim.apps.googleusercontent.com" 
+                        render={(renderProps) => (
+                            <Button 
+                                color="primary"
+                                fullWidth
+                                onClick={renderProps.onClick}
+                                disabled={renderProps.disabled}
+                                startIcon={<Icon/>}
+                                variant="contained"
+                                className={classes.googleButton}>
+                                Google sign in
+                            </Button>
+                        )}
+                        onSuccess={googleSuccess}
+                        onFailure={googleFailure}
+                        cookiePolicy="single_host_origin"
+                        >
+                    </GoogleLogin>
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Button onClick={switchMode}>
