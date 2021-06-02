@@ -8,15 +8,26 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Input from './Input'
 import Icon from './icon'
 
+import {signUp, signIn} from '../../actions/auth'
+
+const initialState = {firstName: '', lastName: '', email: '', password: '', confirmPassword: ''}
+
 const Auth = () => {
     const classes = useStyles()
     const [showPassword, setShowPassword] = useState(false)
     const [isSignup, setIsSignup] = useState(false)
+    const [formData, setFormData] = useState(initialState)
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        
+        if (isSignup) {
+            dispatch(signUp(formData, history))
+        } else {
+            dispatch(signIn(formData, history))
+        }
     }
 
     
@@ -25,7 +36,7 @@ const Auth = () => {
     }
 
     const handleChanged = (event) => {
-
+        setFormData({...formData, [event.target.name]: event.target.value})
     }
 
     const switchMode = () => {
@@ -62,7 +73,7 @@ const Auth = () => {
                         {isSignup && (
                             <>
                                 <Input 
-                                    name="firsName" 
+                                    name="firstName" 
                                     label="First name" 
                                     onChange={handleChanged} 
                                     autoFocus 
@@ -86,10 +97,10 @@ const Auth = () => {
                             onChange={handleChanged} 
                             handleShowPassword={handleShowPassword}/>
                         { isSignup && <Input 
-                            name="consfirmPassword" 
+                            name="confirmPassword" 
                             label="Repeat password" 
                             type="password"
-                            handleChanged={handleChanged} 
+                            onChange={handleChanged} 
                             handleShowPassword={handleShowPassword}/>}
                     </Grid>
                     <Button 

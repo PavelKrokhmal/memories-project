@@ -13,7 +13,7 @@ export const getPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
     const post = req.body
-    const newPost = new PostMessage(post)
+    const newPost = new PostMessage({...post, creator: req.userId, createdAt: new Date().toISOString()})
     try {
         await newPost.save()
         res.status(201).json(newPost)
@@ -45,19 +45,31 @@ export const deletePost = async (req, res) => {
     await PostMessage.findByIdAndRemove(_id)
 
     res.json({message: 'Post deleted successfully'})
-
 }
-
 
 export const likePost = async (req, res) => {
     const {id: _id} = req.params
+    const userId = String(req.userId)
+
+    if (!req.userId) {
+        return res.json({message: 'Unauthenticated'}) 
+    }    
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(404).send('No post with that id')
     }
 
     const post = await PostMessage.findById(_id)
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, {likeCount: post.likeCount + 1}, {new: true})
+
+    const index = post.likes.findIndex((id) => id === userId)
+
+    if (index === -1) {
+        post.likes.push(userId)
+    } else {
+        post.likes = post.likes.filter((id) => id !== userId)
+    }
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {new: true})
 
     res.json(updatedPost)
 }
