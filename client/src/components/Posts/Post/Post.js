@@ -32,7 +32,7 @@ const Post = ({post, setCurrentId}) => {
     const isOwner = (user?.result?.googleId === post?.creator || user?.result?._id === post?.creator)
 
     return (
-        <Card className={classes.card}>
+        <Card className={classes.card} elevation={6} raised>
             <CardMedia className={classes.media}
                 image={post.selectedFile}
                 title={post.title}>

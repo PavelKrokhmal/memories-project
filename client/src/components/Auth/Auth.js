@@ -59,6 +59,7 @@ const Auth = () => {
     const googleFailure = (error) => {
         console.log(error)
         console.log("Google sign in unsuccessful. Try again later.")
+        alert("Google sign in unsuccessful. Try again later.")
     }
 
     return (
