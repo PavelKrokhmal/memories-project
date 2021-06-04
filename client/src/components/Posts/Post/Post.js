@@ -1,5 +1,6 @@
 import React from 'react'
-import {Card, CardActions, CardContent, CardMedia, Button, Typography} from '@material-ui/core'
+import {useHistory} from'react-router-dom'
+import {Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase} from '@material-ui/core'
 
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -14,6 +15,7 @@ import { deletePost, likePost } from '../../../actions/posts'
 const Post = ({post, setCurrentId}) => {
     const dispatch = useDispatch()
     const classes = useStyles()
+    const history = useHistory()
     const user = JSON.parse(localStorage.getItem('memories-profile'))
 
     const Likes = () => {
@@ -31,32 +33,38 @@ const Post = ({post, setCurrentId}) => {
 
     const isOwner = (user?.result?.googleId === post?.creator || user?.result?._id === post?.creator)
 
+    const openPost = () => {
+        history.push(`/posts/${post._id}`)
+    }
+
     return (
         <Card className={classes.card} elevation={6} raised>
-            <CardMedia className={classes.media}
-                image={post.selectedFile}
-                title={post.title}>
-            </CardMedia>
-            <div className={classes.overlay}>
-                <Typography variant="h6">{post.name}</Typography>
-                <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
-            </div>
-            {isOwner && ( 
-                <div className={classes.overlay2}>
-                    <Button style={{color: 'white'}} 
-                        size="small" 
-                        onClick={() => setCurrentId(post._id)}>
-                        <MoreHorizIcon fontSize="default"></MoreHorizIcon>
-                    </Button>
+            <ButtonBase onClick={openPost} component="span" className={classes.cardAction}>
+                <CardMedia className={classes.media}
+                    image={post.selectedFile}
+                    title={post.title}>
+                </CardMedia>
+                <div className={classes.overlay}>
+                    <Typography variant="h6">{post.name}</Typography>
+                    <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
                 </div>
-            )}
-            <div className={classes.details}>
-                <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
-            </div>
-                <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
-            <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p" gutterBottom>{post.message}</Typography>
-            </CardContent>
+                {isOwner && ( 
+                    <div className={classes.overlay2}>
+                        <Button style={{color: 'white'}} 
+                            size="small" 
+                            onClick={() => setCurrentId(post._id)}>
+                            <MoreHorizIcon fontSize="default"></MoreHorizIcon>
+                        </Button>
+                    </div>
+                )}
+                <div className={classes.details}>
+                    <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
+                </div>
+                    <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
+                <CardContent>
+                    <Typography variant="body2" color="textSecondary" component="p" gutterBottom>{post.message}</Typography>
+                </CardContent>
+            </ButtonBase>
             <CardActions className={classes.cardActions}>
                 <Button size="small" 
                     disabled={!user?.result}

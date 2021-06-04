@@ -26,10 +26,6 @@ const Home = () => {
 
     const [currentId, setCurrentId] = useState(null)
 
-    // useEffect(() => {
-    //     dispatch(getPosts())
-    // }, [currentId, dispatch])
-
     const [search, setSearch] = useState('')
 
     const handleKeyPress = (e) => {
@@ -91,9 +87,12 @@ const Home = () => {
                                 color="primary">Search</Button>
                         </AppBar>
                         <Form currentId={currentId} setCurrentId = {setCurrentId}/>
-                        <Paper className={classes.pagination} elevation={6}>
-                            <Pagination page={page}/>
-                        </Paper>
+
+                        {(!searchQuery && !tags.length) && (
+                            <Paper className={classes.pagination} elevation={6}>
+                                <Pagination page={page}/>
+                            </Paper>
+                        )}
                     </Grid>
                 </Grid>
             </Container>

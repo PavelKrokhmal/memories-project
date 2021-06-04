@@ -19,7 +19,7 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <Container>
+            <Container maxWidth="xl">
                 <Navbar/>
                 <Switch>
                     <Route path="/" exact component={() => <Redirect to="/posts"/>}/>
@@ -27,6 +27,7 @@ const App = () => {
                     <Route path="/posts/search" exact component={Home}/>
                     <Route path="/posts/:id" component={PostDetails}/>
                     <Route path="/auth" exact component={() => (!user ? <Auth/> : <Redirect to="/posts"/>)}/>
+                    <Route path="*" component={() => <Redirect to="/posts"/>}/>
                 </Switch>
             </Container>
         </BrowserRouter>
