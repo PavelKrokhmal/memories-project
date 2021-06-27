@@ -1,5 +1,9 @@
 import * as api from '../api'
-import { CREATE, DELETE, FETCH_ALL, FETCH_POST, LIKE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING } from '../constants/actionTypes'
+import { CREATE, DELETE, FETCH_ALL, FETCH_POST, LIKE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CLEAR_POST } from '../constants/actionTypes'
+
+export const clearPost = () => {
+    return {type: CLEAR_POST}
+}
 
 export const getPosts = (page) => async (dispatch) => {
     try {

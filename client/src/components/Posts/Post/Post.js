@@ -10,7 +10,7 @@ import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined';
 import useStyles from './styles'
 import moment from 'moment'
 import {useDispatch} from 'react-redux'
-import { deletePost, likePost } from '../../../actions/posts'
+import { clearPost, deletePost, likePost } from '../../../actions/posts'
 
 const Post = ({post, setCurrentId}) => {
     const dispatch = useDispatch()
@@ -35,6 +35,7 @@ const Post = ({post, setCurrentId}) => {
 
     const openPost = () => {
         history.push(`/posts/${post._id}`)
+        dispatch(clearPost())
     }
 
     return (
@@ -52,7 +53,7 @@ const Post = ({post, setCurrentId}) => {
                     <div className={classes.overlay2}>
                         <Button style={{color: 'white'}} 
                             size="small" 
-                            onClick={() => setCurrentId(post._id)}>
+                            onClick={(event) => {event.stopPropagation(); setCurrentId(post._id)}}>
                             <MoreHorizIcon fontSize="default"></MoreHorizIcon>
                         </Button>
                     </div>

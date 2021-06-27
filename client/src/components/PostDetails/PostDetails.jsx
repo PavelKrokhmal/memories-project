@@ -9,6 +9,7 @@ import useStyles from './styles.js'
 
 const PostDetails = () => {
     const {post, posts, isLoading} = useSelector((state) => state.posts)
+
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -16,7 +17,7 @@ const PostDetails = () => {
 
     useEffect(() => {
         dispatch(getPost(id))
-    }, [id])
+    }, [])
 
     useEffect(() => {
         if(post) {

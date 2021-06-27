@@ -1,4 +1,4 @@
-import { CREATE, DELETE, FETCH_ALL, LIKE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, FETCH_POST } from '../constants/actionTypes'
+import { CREATE, DELETE, FETCH_ALL, LIKE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, FETCH_POST, CLEAR_POST } from '../constants/actionTypes'
 
 const initialState = {
     isLoading: false,
@@ -19,6 +19,8 @@ const posts = (state = initialState, action) => {
                 numberOfPages: action.payload.numberOfPages}
         case FETCH_BY_SEARCH:
             return {...state, posts: action.payload}
+        case CLEAR_POST:
+            return {...state, post: null}
         case CREATE:
             return {...state, posts: [...state.posts, action.payload]}
         case UPDATE:
